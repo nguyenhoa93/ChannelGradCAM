@@ -1,1 +1,1 @@
-srun -J "train-channel" --pty --gres=gpu:1 python main.py
+srun -J "train-channel" --pty --gres=gpu:1 python main.py --imdir assets/dogs_and_cats/train --epochs 10
