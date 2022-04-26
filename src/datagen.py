@@ -36,8 +36,6 @@ class HybridDataGen(tf.keras.utils.Sequence):
         
         self.df = self.create_hybrid_df(df)
         print("Found {} samples: {}".format(len(self.df), self.df.label.value_counts()))
-        # Save dataframe
-        self.df.to_csv(os.path.join(imdir, "..", "{}_seed{}.csv".format(stage, seed)), index=False)
         
         self.channel1s = self.df.channel1.values
         self.channel2s = self.df.channel2.values
