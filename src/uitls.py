@@ -1,3 +1,5 @@
+import numpy as np
+import matplotlib.pyplot as plt
 from skimage.transform import resize
 from mpl_toolkits.axes_grid1 import ImageGrid
 
