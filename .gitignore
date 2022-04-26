@@ -6,6 +6,6 @@
 __pycache__
 */__pycache__
 sandbox
-data/dogs_and_cats/
+assets/dogs_and_cats/
 */*.h5
 **/.*

@@ -22,7 +22,7 @@ def build_model():
     return model
 
 parser = argparse.ArgumentParser("TRAINING CLASSIFICATION BASED ON CHANNEL 1")
-parser.add_argument("--imdir", type=str, default="data/dogs_and_cats/train", help="path to image directory")
+parser.add_argument("--imdir", type=str, default="assets/dogs_and_cats/train", help="path to image directory")
 parser.add_argument("--epochs", type=int, default=10, help="number of epochs")
 
 args = parser.parse_args()
