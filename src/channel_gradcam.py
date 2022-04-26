@@ -94,7 +94,7 @@ class ChannelGradCAM(object):
         return cams, channel_cams
     
     def extract_features(self, im):
-        return FeaturesExtraction(self.channel_model, "channel_cov").extract_features(im)
+        return FeaturesExtraction(self.channel_model, "channel_conv").extract_features(im)
         
          
         
