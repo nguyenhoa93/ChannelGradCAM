@@ -100,22 +100,20 @@ class HybridDataGen(tf.keras.utils.Sequence):
     
     
     def create_hybrid_df(self, df):
-        try:
-            new_df = pd.read_csv(os.path.join(imdir, "..", "{}_seed{}.csv".format(stage, seed)))
-        except FileNotFoundError:
-            dogs = df[df["label"] == "dog"]["filename"].values
-            cats = df[df["label"] == "cat"]["filename"].values
+        
+        dogs = df[df["label"] == "dog"]["filename"].values
+        cats = df[df["label"] == "cat"]["filename"].values
 
-            if len(cats) > len(dogs):
-                cats = cats[:len(dogs)]
-            else:
-                dogs = dogs[:len(cats)]
+        if len(cats) > len(dogs):
+            cats = cats[:len(dogs)]
+        else:
+            dogs = dogs[:len(cats)]
 
-            dog_df = self.hybrate(dogs, cats, label="dog", seed=2022)
-            cat_df = self.hybrate(cats, dogs, label="cat", seed=2021)
+        dog_df = self.hybrate(dogs, cats, label="dog", seed=2022)
+        cat_df = self.hybrate(cats, dogs, label="cat", seed=2021)
 
-            new_df = pd.concat([dog_df, cat_df], ignore_index=True)
-            new_df["label"] = new_df["label"].map({"dog": 1, "cat": 0})
+        new_df = pd.concat([dog_df, cat_df], ignore_index=True)
+        new_df["label"] = new_df["label"].map({"dog": 1, "cat": 0})
         
         return new_df
     
