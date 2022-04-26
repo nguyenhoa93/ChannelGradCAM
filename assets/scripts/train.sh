@@ -1,0 +1,1 @@
+srun -J "train-channel" --pty --gres=gpu:1 python main.py

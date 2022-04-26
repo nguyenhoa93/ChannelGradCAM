@@ -14,7 +14,7 @@ class HybridDataGen(tf.keras.utils.Sequence):
                  batch_size=32,
                  seed=42, 
                  stage="train"):
-        """Generating hybrid data: channel containing target for prediction, channel 2 and 3 may contain several types: None, dog, cat.
+        """Generating hybrid data: channel containing target for prediction, channel 2 and 3 may contain several types: dog, cat.
 
         Args:
             imdir (str): path to directory with images
@@ -157,7 +157,7 @@ class HybridDataGen(tf.keras.utils.Sequence):
         else:
             return X, files
         
-class NormalDatagen(tf.keras.utils.Sequence):
+class PureDatagen(tf.keras.utils.Sequence):
     def __init__(self,
                  imdir,
                  df,
@@ -167,6 +167,18 @@ class NormalDatagen(tf.keras.utils.Sequence):
                  batch_size=32,
                  stage="train"
                 ):
+        """Generate pure data (3 channels are the same object, representing for color RGB)
+
+        Args:
+            imdir (str): path to directory with images
+            df (pd.DataFrame): dataframe with filenames and labels
+            target_size (tuple, optional): input size. Defaults to (224,224,3).
+            preprocess (bool, optional): preprocessing with preprocess_input of keras model. Defaults to False.
+            n_classes (int, optional): number of classes. Defaults to 2.
+            batch_size (int, optional): batch size. Defaults to 32.
+            seed (int, optional): random seed. Defaults to 42.
+            stage (str, optional): stage of data ["train", "val", "eval", "test"]. Defaults to "train".
+        """
         self.imdir = imdir
         self.target_size = target_size
         self.preprocess = preprocess
