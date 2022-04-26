@@ -1,5 +1,7 @@
 import numpy as np
+import tensorflow as tf
 from tensorflow.keras import Model
+from skimage.transform import resize
 
 class LayerCAM(object):
     def __init__(self, model, layername):
