@@ -51,4 +51,28 @@ def plot_channels(im, labels=None, figsize=None):
     if labels is not None:
         for i in range(im.shape[0]):
             axes[4*i].set_ylabel(labels[i])
+            
+def vis_feature_map(feature_maps, channel_cams=None, size_factor=1.5, alpha=0.8):
+    if feature_maps.shape[3] < 8:
+        ncols = feature_maps.shape[3]
+        nrows = 1
+        figsize = (size_factor*ncols, size_factor)
+    else:
+        ncols = min(8,int(np.floor(np.sqrt(feature_maps.shape[3]))))
+        nrows = ncols
+        figsize = (size_factor*ncols,ncols*size_factor)
+    
+    fig = plt.figure(figsize=figsize)
+    axes = ImageGrid(
+        fig, 111,
+        nrows_ncols=(nrows, ncols),
+        axes_pad=0.05,
+        share_all=True
+    )
+    
+    for i in range(feature_maps.shape[3]):
+        axes[i].imshow(feature_maps[0,:,:,i], cmap="gray")
+        axes[i].axis("off")
+        if channel_cams is not None:
+            axes[i].imshow(channel_cams[0,:,:,i], alpha=alpha, vmin=0, vmax=np.max(channel_cams))
 

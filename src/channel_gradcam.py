@@ -3,12 +3,29 @@ import tensorflow as tf
 from tensorflow.keras import Model
 from skimage.transform import resize
 
+class FeaturesExtraction(object):
+    def __init__(self,model,layername):
+        """Extracting features from a model at a given layer.
+
+        Args:
+            model (tf.keras.Model): keras model
+            layername (str): name of layer to extract features from
+        """
+        self.model = model
+        self.layername = layername
+        
+        self.feature_model = Model(inputs=model.inputs,outputs=model.get_layer(layername).output)
+    
+    def extract_features(self, img):
+        return self.feature_model.predict(img)
+    
+    
 class LayerCAM(object):
     def __init__(self, model, layername):
         self.model  = model
         self.layername = layername
         
-    def compute_heatmap(self, im, classIdx=None, eps=1e-5):
+    def compute_heatmap(self, im, classIdx=None):
         laycamModel = Model(
             inputs = [self.model.inputs],
             outputs = [self.model.get_layer(self.layername).output, self.model.output]
@@ -75,6 +92,9 @@ class ChannelGradCAM(object):
         cams, channel_cams = LayerCAM(self.channel_model, "channel_conv").compute_heatmap(im)
         
         return cams, channel_cams
+    
+    def extract_features(self, im):
+        return FeaturesExtraction(self.channel_model, "channel_cov").extract_features(im)
         
          
         
