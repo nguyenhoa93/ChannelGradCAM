@@ -19,17 +19,26 @@ class FeaturesExtraction(object):
     def extract_features(self, img):
         return self.feature_model.predict(img)
     
-def vis_feature_map(feature_maps):
-    ncol = min(8,int(np.floor(np.sqrt(feature_maps.shape[3]))))
-    fig, ax = plt.subplots(ncol, ncol,figsize=(1.5*ncol,ncol*1.5))
-    if ncol == 1:
-        ax.imshow(feature_maps[0,:,:,0],cmap="gray")
+def vis_feature_map(feature_maps, channel_cams=None, size_factor=1.5, alpha=0.8):
+    if feature_maps.shape[3] < 8:
+        ncols = feature_maps.shape[3]
+        nrows = 1
+        figsize = (size_factor*ncols, size_factor)
     else:
-        count = 0
-        for i in range(ncol):
-            for j in range(ncol):
-                ax[j,i].imshow(feature_maps[0,:,:,count],cmap="gray")
-                ax[j,i].axis("off")
-                count += 1
-    plt.subplots_adjust(wspace=0.1, hspace=0.1);
-    plt.show()
+        ncols = min(8,int(np.floor(np.sqrt(feature_maps.shape[3]))))
+        nrows = ncols
+        figsize = (size_factor*ncols,ncols*size_factor)
+    
+    fig = plt.figure(figsize=figsize)
+    axes = ImageGrid(
+        fig, 111,
+        nrows_ncols=(nrows, ncols),
+        axes_pad=0.05,
+        share_all=True
+    )
+    
+    for i in range(feature_maps.shape[3]):
+        axes[i].imshow(feature_maps[0,:,:,i], cmap="gray")
+        axes[i].axis("off")
+        if channel_cams is not None:
+            axes[i].imshow(channel_cams[0,:,:,i], alpha=alpha, vmin=0, vmax=np.max(channel_cams))

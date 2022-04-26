@@ -66,53 +66,38 @@ class HybridDataGen(tf.keras.utils.Sequence):
             np.random.shuffle(self.indexes)
         
     @staticmethod
-    def hybrate(ls1, ls2, label):
-        np.random.seed(42)
+    def hybrate(ls1, ls2, label, seed=2022):
+        np.random.seed(seed)
         shuffled1_ls1 = np.random.permutation(ls1)
         shuffled1_ls2 = np.random.permutation(ls2)
-        np.random.seed(2022)
+        np.random.seed(seed*2)
         shuffled2_ls1 = np.random.permutation(ls1)
         shuffled2_ls2 = np.random.permutation(ls2)
+        np.random.seed(seed*3)
+        shuffled3_ls1 = np.random.permutation(ls1)
+        shuffled3_ls2 = np.random.permutation(ls2)
+        np.random.seed(seed*4)
+        shuffled4_ls1 = np.random.permutation(ls1)
+        shuffled4_ls2 = np.random.permutation(ls2)
         
         df1 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # 3 channels: dog-dog-dog (if label="dog")
         df1["channel2"] = shuffled1_ls1
         df1["channel3"] = shuffled2_ls1
         
-        df2 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-dog-None
-        df2["channel2"] = shuffled2_ls1
-        df2["channel3"] = [None]*len(ls1)
+        df2 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-dog-cat
+        df2["channel2"] = shuffled3_ls1
+        df2["channel3"] = shuffled1_ls2
         
-        df3 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-None-dog
-        df3["channel3"] = shuffled1_ls1
-        df3["channel2"] = [None]*len(ls1)
+        df3 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-cat-dog
+        df3["channel2"] = shuffled2_ls2
+        df3["channel3"] = shuffled4_ls1
         
-        df4 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-cat-None
-        df4["channel2"] = shuffled1_ls2
-        df4["channel3"] = [None]*len(ls1)
+        df4 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-cat-cat
+        df4["channel2"] = shuffled3_ls2
+        df4["channel3"] = shuffled4_ls2
         
-        df5 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-None-cat
-        df5["channel2"] = [None]*len(ls1)
-        df5["channel3"] = shuffled2_ls2
-        
-        df6 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-dog-cat
-        df6["channel2"] = shuffled1_ls1
-        df6["channel3"] = shuffled1_ls2
-        
-        df7 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-cat-dog
-        df7["channel2"] = shuffled2_ls2
-        df7["channel3"] = shuffled2_ls1
-        
-        df8 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-cat-cat
-        df8["channel2"] = shuffled2_ls2
-        df8["channel3"] = shuffled1_ls2
-        
-        df9 = pd.DataFrame({"channel1": ls1, "label": [label]*len(ls1)}) # dog-None-None
-        df9["channel2"] = [None]*len(ls1)
-        df9["channel3"] = [None]*len(ls1)
-        
-        return pd.concat([df1, df2, df3,
-                          df4, df5, df6,
-                          df7, df8, df9
+        return pd.concat([df1, df2,
+                          df3, df4
                          ], ignore_index=True)
     
     
@@ -128,8 +113,8 @@ class HybridDataGen(tf.keras.utils.Sequence):
             else:
                 dogs = dogs[:len(cats)]
 
-            dog_df = self.hybrate(dogs, cats, label="dog")
-            cat_df = self.hybrate(cats, dogs, label="cat")
+            dog_df = self.hybrate(dogs, cats, label="dog", seed=2022)
+            cat_df = self.hybrate(cats, dogs, label="cat", seed=2021)
 
             new_df = pd.concat([dog_df, cat_df], ignore_index=True)
             new_df["label"] = new_df["label"].map({"dog": 1, "cat": 0})
