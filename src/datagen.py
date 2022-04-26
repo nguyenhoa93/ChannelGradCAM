@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-import tensoflow as tf
+import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.resnet50 import preprocess_input
 
