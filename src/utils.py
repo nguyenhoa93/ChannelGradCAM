@@ -76,7 +76,7 @@ def vis_feature_map(feature_maps, channel_cams=None, size_factor=1.5, alpha=0.8)
         if channel_cams is not None:
             axes[i].imshow(channel_cams[0,:,:,i], alpha=alpha, vmin=0, vmax=np.max(channel_cams))
             
-def plot_heatmaps(feature_maps, cams, size_factor=1.5, alpha=0.8):
+def plot_average_heatmaps(feature_maps, cams, size_factor=1.5, alpha=0.8):
     resized_fm = resize(feature_maps[0,:,:], (cams.shape[1], cams.shape[2]))
     
     figsize = (size_factor*3, size_factor)
@@ -101,3 +101,26 @@ def plot_heatmaps(feature_maps, cams, size_factor=1.5, alpha=0.8):
     axes[2].set_title("overlay")
     axes[2].axis("off")
 
+def plot_heatmaps(feature_maps, cams, size_factor=1.5, alpha=0.8):
+    
+    figsize = (size_factor*3, size_factor)
+    fig = plt.figure(figsize=figsize)
+    axes = ImageGrid(
+        fig, 111,
+        nrows_ncols=(1, 3),
+        axes_pad=0.05,
+        share_all=True
+    )
+    
+    axes[0].imshow(feature_maps[0,:,:,:])
+    axes[0].set_title("image")
+    axes[0].axis("off")
+    
+    axes[1].imshow(cams[0,:,:])
+    axes[1].set_title("CAM")
+    axes[1].axis("off")
+    
+    axes[2].imshow(feature_maps[0,:,:,:])
+    axes[2].imshow(cams[0,:,:], alpha=alpha)
+    axes[2].set_title("overlay")
+    axes[2].axis("off")
