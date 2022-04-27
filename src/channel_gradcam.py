@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras import Model
 from skimage.transform import resize
+from tensorflow.keras.applications.resnet50 import decode_predictions
 
 class FeaturesExtraction(object):
     def __init__(self,model,layername):
@@ -37,7 +38,10 @@ class LayerCAM(object):
             (convOuts, preds) = laycamModel(inputs)  # preds after softmax
             if classIdx is None:
                 classIdx = np.argmax(preds)
-                print("Predicted class: {}".format(self.inv_maps[classIdx]))
+                if inv_maps == dict:
+                    print("Predicted class: {}".format(self.inv_maps[classIdx]))
+                else:
+                    print("Predicted class: {}".format(decode_predictions(preds)))
             loss = preds[:, classIdx]
             
         # compute gradients with automatic differentiation
