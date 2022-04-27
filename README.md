@@ -1,7 +1,7 @@
 # ChannelGradCAM
-ChannelGradCAM helps to answer how different channels in the input image play a role in the performance of CNNs. Regularly, the pre-trained models on ImageNet take the input with 3 channels, representing for colors: Red, Green and Blue. However, it is hard to say which channel is the most important for the prediction.
+ChannelGradCAM helps to answer how different channels in the input image play a role in CNNs. Regularly, the pre-trained models on ImageNet take the input with 3 channels, representing for colors: Red, Green and Blue. However, it is hard to say which channel is the most important for the prediction.
 
-To demonstrate the performance of ChannelGradCAM, we will introduce inductive biases into the model so that the first channel (`channel1`) plays a key role in the prediction, regardless of the other channels. This is addressed by changing the `channel2` and `channel3` to random images of the same class or different class. To be more specific, we tried to classify `dog` and `cat` based on the `channel1`. The pre-trained model `resnet50` on ImageNet is used to re-train on our generated datasets.
+To demonstrate the performance of ChannelGradCAM, we will introduce inductive biases into the model so that the first channel (`channel1`) plays a key role in the prediction, regardless of the other channels. This is addressed by changing the `channel2` and `channel3` to random images of the same class or different class. To be more specific, we tried to classify `dog` and `cat` based on the `channel1`. The pre-trained model `resnet50` on ImageNet is used to re-train on our mixed-channel datasets. We called it `MixChannelModel`. The model got accuracy of 0.9363 on mixed-channel dataset and 0.9143 on the regular dataset (image with RGB channels).
 
 Here are examples of the input images together with their corresponding labels:
 ![](assets/inputs.png)
@@ -24,22 +24,38 @@ LayerCAM ([Jiang *et al.*](https://ieeexplore.ieee.org/document/9462463)) allows
     <td><img src="./assets/input1.png"><img src="./assets/input2.png"></td>
   </tr>
   <tr>
-    <td rowspan="2">Image + LayerCAM</td>
-    <td>Our model</td>
-    <td><img src="./assets/image-cam-my-model.png"><img src="./assets/image-cam1-my-model.png"></td>
-  </tr>
-  <tr>
-    <td>Pre-trained ResNet50</td>
-    <td><img src="./assets/image-cam-resnet50.png"></td>
-  </tr>
-  <tr>
     <td rowspan="2">ChannelGraCAM</td>
-    <td>Our model</td>
-    <td><img src="./assets/input-channel-cams-my-model.png"><img src="./assets/input-channel-cams1-my-model.png"></td>
+    <td>MixChannelModel</td>
+    <td>
+        Predicted class: <b>dog</b>
+        <img src="./assets/input-channel-cams-my-model.png">
+        Predicted class: <b>cat</b>
+        <img src="./assets/input-channel-cams1-my-model.png">
+    </td>
   </tr>
   <tr>
     <td>Pre-trained ResNet50</td>
-    <td><img src="./assets/input-channel-cams-resnet50.png"></td>
+    <td>
+        Predicted class: <b>tabby</b>
+        <img src="./assets/input-channel-cams-resnet50.png">
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="2">Image + LayerCAM</td>
+    <td>MixChannelModel</td>
+    <td>
+        Predicted class: <b>dog</b>
+        <img src="./assets/image-cam-my-model.png">
+        Predicted class: <b>cat</b>
+        <img src="./assets/image-cam1-my-model.png">
+    </td>
+  </tr>
+  <tr>
+    <td>Pre-trained ResNet50</td>
+    <td>
+        Predicted class: <b>tabby</b>
+        <img src="./assets/image-cam-resnet50.png">
+    </td>
   </tr>
 </tbody>
 </table>
