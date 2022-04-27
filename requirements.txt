@@ -2,3 +2,4 @@ tensorflow==2.8.0
 ipykernel
 matplotlib
 jupyter
+gdown
