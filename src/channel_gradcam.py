@@ -2,7 +2,6 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras import Model
 from skimage.transform import resize
-from tensorflow.keras.applications.resnet50 import decode_predictions
 
 class FeaturesExtraction(object):
     def __init__(self,model,layername):
@@ -22,10 +21,10 @@ class FeaturesExtraction(object):
     
     
 class LayerCAM(object):
-    def __init__(self, model, layername, inv_maps = {0: "cat", 1: "dog"}):
+    def __init__(self, model, layername, decode_pred = {0: "cat", 1: "dog"}):
         self.model  = model
         self.layername = layername
-        self.inv_maps = inv_maps
+        self.decode_pred = decode_pred
         
     def compute_heatmap(self, im, classIdx=None):
         laycamModel = Model(
@@ -38,10 +37,10 @@ class LayerCAM(object):
             (convOuts, preds) = laycamModel(inputs)  # preds after softmax
             if classIdx is None:
                 classIdx = np.argmax(preds)
-                if type(self.inv_maps) == dict:
-                    print("Predicted class: {}".format(self.inv_maps[classIdx]))
+                if type(self.decode_pred) == dict:
+                    print("Predicted class: {}".format(self.decode_pred[classIdx]))
                 else:
-                    print("Predicted class: {}".format(decode_predictions(preds)))
+                    print("Predicted class: {}".format(self.decode_pred(preds)))
             loss = preds[:, classIdx]
             
         # compute gradients with automatic differentiation
@@ -70,9 +69,10 @@ class LayerCAM(object):
         return np.array(cams), np.array(channel_cams)
 
 class ChannelGradCAM(object):
-    def __init__(self, model):
+    def __init__(self, model, decode_pred = {0: "cat", 1: "dog"}):
         self.model = model
         self.channel_model = self.__create_channel_model()
+        self.decode_pred = decode_pred
     
     def __create_channel_model(self):
         inputs = tf.keras.layers.Input((224,224,3), name="input")
@@ -94,7 +94,9 @@ class ChannelGradCAM(object):
         return channel_model
     
     def compute_heatmap(self, im):
-        cams, channel_cams = LayerCAM(self.channel_model, "channel_conv").compute_heatmap(im)
+        cams, channel_cams = LayerCAM(model=self.channel_model, 
+                                      layername="channel_conv", 
+                                      decode_pred=self.decode_pred).compute_heatmap(im)
         
         return cams, channel_cams
     
