@@ -38,7 +38,7 @@ class LayerCAM(object):
             (convOuts, preds) = laycamModel(inputs)  # preds after softmax
             if classIdx is None:
                 classIdx = np.argmax(preds)
-                if inv_maps == dict:
+                if type(self.inv_maps) == dict:
                     print("Predicted class: {}".format(self.inv_maps[classIdx]))
                 else:
                     print("Predicted class: {}".format(decode_predictions(preds)))
