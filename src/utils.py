@@ -23,7 +23,7 @@ def resize_maps(maps, target_size):
     return np.array(resized_maps)
 
 
-def plot_channels(im, labels=None, figsize=None):
+def plot_channels(im, labels=None, figsize=None, fontsize=12):
     fig = plt.figure(figsize=figsize)
     
     axes = ImageGrid(
@@ -44,13 +44,13 @@ def plot_channels(im, labels=None, figsize=None):
             axes[4*i+j+1].set_yticks([])
     
     # column names
-    axes[0].set_title("color")
+    axes[0].set_title("color", fontsize=fontsize)
     for i in range(3):
         axes[i+1].set_title(f"channel{i+1}")
         
     if labels is not None:
         for i in range(im.shape[0]):
-            axes[4*i].set_ylabel(labels[i])
+            axes[4*i].set_ylabel(labels[i], fontsize=fontsize)
             
 def vis_feature_map(feature_maps, channel_cams=None, size_factor=1.5, alpha=0.8):
     if feature_maps.shape[3] < 8:
