@@ -40,7 +40,7 @@ class LayerCAM(object):
                 if type(self.decode_pred) == dict:
                     print("Predicted class: {}".format(self.decode_pred[classIdx]))
                 else:
-                    print("Predicted class: {}".format(self.decode_pred(preds)))
+                    print("Predicted class: {}".format(self.decode_pred(preds.numpy())))
             loss = preds[:, classIdx]
             
         # compute gradients with automatic differentiation
