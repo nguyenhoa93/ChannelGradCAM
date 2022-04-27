@@ -21,9 +21,10 @@ class FeaturesExtraction(object):
     
     
 class LayerCAM(object):
-    def __init__(self, model, layername):
+    def __init__(self, model, layername, inv_maps = {0: "cat", 1: "dog"}):
         self.model  = model
         self.layername = layername
+        self.inv_maps = inv_maps
         
     def compute_heatmap(self, im, classIdx=None):
         laycamModel = Model(
@@ -36,7 +37,7 @@ class LayerCAM(object):
             (convOuts, preds) = laycamModel(inputs)  # preds after softmax
             if classIdx is None:
                 classIdx = np.argmax(preds)
-                print(classIdx)
+                print("Predicted class: {}".format(self.inv_maps[classIdx]))
             loss = preds[:, classIdx]
             
         # compute gradients with automatic differentiation

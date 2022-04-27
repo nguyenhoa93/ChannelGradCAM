@@ -142,7 +142,7 @@ class HybridDataGen(tf.keras.utils.Sequence):
             
             im = np.concatenate([channel1, channel2, channel3], axis=2)
             if self.preprocess:
-                im = preprocess_input(im)
+                im = preprocess_input(image.img_to_array(im))
             else:
                 im = im / 255.
             
@@ -185,7 +185,7 @@ class PureDatagen(tf.keras.utils.Sequence):
         
         self.df = df.copy()
         self.df["label"] = self.df["label"].map({"dog": 1, "cat": 0})
-        print("Found {} samples: {}".format(len(self.df), self.df.label.value_counts()))
+        print("Found {} samples: \n{}".format(len(self.df), self.df.label.value_counts()))
         self.filenames = self.df["filename"].values
         self.list_IDs = [i for i in range(len(self.filenames))]
         self.labels = self.df["label"].values
@@ -220,7 +220,7 @@ class PureDatagen(tf.keras.utils.Sequence):
             im = image.load_img(os.path.join(self.imdir, self.filenames[ID]), target_size=self.target_size)
             
             if self.preprocess:
-                im = preprocess_input(im)
+                im = preprocess_input(image.img_to_array(im))
             else:
                 im = np.array(im) / 255.
                 
