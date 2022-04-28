@@ -142,7 +142,7 @@ class HybridDataGen(tf.keras.utils.Sequence):
             
             im = np.concatenate([channel1, channel2, channel3], axis=2)
             if self.preprocess:
-                im = np.flip(im, axis=3)
+                im = np.flip(im, axis=2)
                 im = preprocess_input(image.img_to_array(im))
             else:
                 im = im / 255.
