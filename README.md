@@ -36,6 +36,8 @@ LayerCAM ([Jiang *et al.*](https://ieeexplore.ieee.org/document/9462463)) allows
   <tr>
     <td>Pre-trained ResNet50</td>
     <td>
+        Predicted class: <b>shower_curtain</b>
+        <img src="./assets/input-channel-cams1-resnet50.png">
         Predicted class: <b>tabby</b>
         <img src="./assets/input-channel-cams-resnet50.png">
     </td>
@@ -53,6 +55,8 @@ LayerCAM ([Jiang *et al.*](https://ieeexplore.ieee.org/document/9462463)) allows
   <tr>
     <td>Pre-trained ResNet50</td>
     <td>
+        Predicted class: <b>shower_curtain</b>
+        <img src="./assets/image-cam1-resnet50.png">
         Predicted class: <b>tabby</b>
         <img src="./assets/image-cam-resnet50.png">
     </td>
